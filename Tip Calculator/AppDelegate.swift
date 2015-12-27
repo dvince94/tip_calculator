@@ -13,15 +13,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    var dict_Item_Names: NSMutableDictionary = NSMutableDictionary()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        
+        let documentDirectoryPath = paths[0] as String
+        
+        let plistFilePathInDocumentDirectory = documentDirectoryPath + "/PastBills.plist"
+        
+        let dictionaryFromFile: NSMutableDictionary? = NSMutableDictionary(contentsOfFile: plistFilePathInDocumentDirectory)
+        
+        /*
+        IF the optional variable dictionaryFromFile has a value, THEN
+        PastBills.plist exists in the Documents directory and the dictionary is successfully created
+        ELSE read PastBills.plist from the application's main bundle.
+        */
+        if let dictionaryFromFileInDocumentDirectory = dictionaryFromFile {
+            // Inventory.plist exists in the Documents directory
+            dict_Item_Names = dictionaryFromFileInDocumentDirectory
+        } else {
+            // Inventory.plist does not exist in the Documents directory; Read it from the main bundle.
+            // Obtain the file path to the plist file in the mainBundle (project folder)
+            let plistFilePathInMainBundle = NSBundle.mainBundle().pathForResource("PastBills", ofType: "plist")
+            
+            // Instantiate an NSMutableDictionary object and initialize it with the contents of the PastBills.plist file.
+            let dictionaryFromFileInMainBundle: NSMutableDictionary? = NSMutableDictionary(contentsOfFile: plistFilePathInMainBundle!)
+            
+            // Assign it to the instance variable
+            dict_Item_Names = dictionaryFromFileInMainBundle!
+        }
+
+
         // Override point for customization after application launch.
         return true
     }
 
     func applicationWillResignActive(application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        let documentDirectoryPath = paths[0] as String
+        let plistFilePathInDocumentDirectory = documentDirectoryPath + "/PastBills.plist"
+        
+        dict_Item_Names.writeToFile(plistFilePathInDocumentDirectory, atomically: true)
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
