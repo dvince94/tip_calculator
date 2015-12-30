@@ -25,6 +25,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //tipControl.setTitle("15", forSegmentAtIndex: 0)
         // Do any additional setup after loading the view, typically from a nib.
         tipLabel.text = "$0.00"
         totalLabel.text = "$0.00"
@@ -118,6 +119,22 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
     @IBAction func onTap(sender: UITapGestureRecognizer) {
         view.endEditing(true)
+    }
+    
+    /// This method is called when the user taps Return on the keyboard
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        
+        
+        
+        // Deactivate the text field and remove the keyboard
+        
+        textField.resignFirstResponder()
+        
+        
+        
+        return true
+        
     }
 }
 
